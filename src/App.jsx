@@ -44,6 +44,19 @@ function App() {
   */
   const addTask = () => {
     // START EDITING
+    if (title) {
+      const newTask = {
+        id: uuidv4(),
+        title: title,
+        description: description,
+        completed: false,
+        dueDate: dueDate,
+      };
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+      setTitle("");
+      setDescription("");
+      setDueDate("");
+    }
     // END EDITING
   };
 
@@ -61,6 +74,11 @@ function App() {
   */
   const toggleCompletion = (id) => {
     // START EDITING
+    setTasks((previousTasks) =>
+      previousTasks.map((task) =>
+        task.id === id ? { ...task, completed: (!task.completed)} : task
+      )
+    );
     // END EDITING
   };
   
@@ -77,7 +95,7 @@ function App() {
     HINT HINT NUDGE NUDGE: I'm getting some Week 4 HW flashbacks...are you?
   */
   const deleteTask = (id) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    setTasks((previousTasks) => previousTasks.filter((task) => task.id !== id));
   };
   
   /*
@@ -97,6 +115,16 @@ function App() {
   */
   const calculateProgress = () => {
     // START EDITING
+    //default value
+    let percentage = 0;
+    if (tasks.length === 0){
+      return precentage;
+    }
+    else {
+      const completedTaskCount = tasks.filter((task) => task.completed).length;
+      percentage = (completedTaskCount / tasks.length) * 100;
+      return percentage;
+    }
     // END EDITING
   };
 
@@ -112,17 +140,20 @@ function App() {
         - Set the onChange prop equal to a function (e.g. an anonymous arrow f'n), where all
           it does is call setTitle/setDescription/setDueDate to the e.target.value. SEE THE SLIDE
           "Event handlers with a parameter" from class FOR MORE INFO.
+
+          state variable is useState
         */}
+
         <TextField
           required
-          label="Title"
+          label = "Title"
         />
         <TextField
-          label="Description"
+          label = "Description"
         />
         <TextField
-          label="Due Date"
-          type="date"
+          label = "Due Date"
+          type = "date"
           InputLabelProps={{ shrink: true }}
         />
         <Button variant="contained">
